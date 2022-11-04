@@ -1,0 +1,22 @@
+#!/bin/sh
+
+rm -r -f ./out
+rm -r -f ./tmp
+mkdir ./tmp
+mkdir ./out
+
+for file in ./src/*.asm; do
+    nasm -f elf32 $file -o "./tmp/$(basename "$file" .asm).o"
+done
+
+for file in ./tmp/*.o; do
+    ld -m elf_i386 $file -o "./out/$(basename "$file" .o)"
+done
+
+for file in ./out; do
+    chmod +x $file
+done
+
+rm -r -f ./tmp
+
+echo "Finished Building!"
